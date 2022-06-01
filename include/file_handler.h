@@ -48,5 +48,21 @@ int yj_append_to_file(char *filename, char *message);
  */
 int yj_file_len_print(char *filename);
 
+/**
+ * @brief 하드 링크를 생성하는 함수 
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int create_hardlink(char *filename);
+
+/**
+ * @brief Create a softlink object
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int create_softlink(char *filename);
+
 #else
 #endif

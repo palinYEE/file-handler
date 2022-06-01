@@ -12,6 +12,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<unistd.h>
+#include<sys/stat.h>
+#include<sys/types.h>
 #include"file_handler.h"
 
 /**
@@ -149,4 +152,26 @@ err:
         fclose(fp);
     }
     return -1;
+}
+
+/**
+ * @brief 하드 링크를 생성하는 함수 
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int create_hardlink(char *filename)
+{
+    return 0;
+}
+
+/**
+ * @brief Create a softlink object
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int create_softlink(char *filename)
+{
+    return 0;
 }
