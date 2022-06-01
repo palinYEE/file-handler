@@ -63,6 +63,17 @@ int main(int argc, char **argv)      // 옵션의 개수와 옵션 문자열을 
             goto goto_help;
         }
         break;
+    case 'l':
+        switch (argv[2][1])
+        {
+        case 'h':   /* hard link */
+            /* code */
+            break;
+        case 's':   /* soft link */
+            break;
+        default:
+            break;
+        }
     default:
         printf("./file_handler_main: invalid option -- %s\n", argv[1]);
         help();
