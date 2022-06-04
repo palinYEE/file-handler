@@ -72,5 +72,13 @@ int create_softlink(const char *filename);
  */
 int delete_link(const char *filename);
 
+/**
+ * @brief print info of file
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int stat_file(const char *filename);
+
 #else
 #endif
