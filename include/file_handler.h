@@ -54,7 +54,7 @@ int yj_file_len_print(char *filename);
  * @param filename 파일 이름
  * @return int 0: 성공, -1: 실패
  */
-int create_hardlink(char *filename);
+int create_hardlink(const char *filename);
 
 /**
  * @brief Create a softlink object
@@ -62,7 +62,15 @@ int create_hardlink(char *filename);
  * @param filename 파일 이름
  * @return int 0: 성공, -1: 실패
  */
-int create_softlink(char *filename);
+int create_softlink(const char *filename);
+
+/**
+ * @brief delete a link file
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int delete_link(const char *filename);
 
 #else
 #endif

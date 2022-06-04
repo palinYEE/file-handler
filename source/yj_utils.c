@@ -22,9 +22,15 @@ void help(void)
     printf(" * @date 2022-05-29\n");
     printf(" * @copyright Copyright (c) 2022\n");
     printf("================================================\n");
-    printf("usage: ./file_handler_main [-rwao] <file name> <message>\n");
-    printf("    -r : read file\n");
-    printf("    -w : write message in file\n");
-    printf("    -a : append message in file\n");
-    printf("    -o : print total offset \n");
+    printf("Usage: ./file_handler_main [options] [variable[=value] ...]\n\n");
+    printf("Options:\n");
+    printf("    -r [filename]: read file\n");
+    printf("    -w [filename] [Message]: write message in file\n");
+    printf("    -a [filename] [Message]: append message in file\n");
+    printf("    -o [filename]: print total offset \n");
+    printf("    -l  [--hsd] [filename]\n");
+    printf("        --h: create hard link\n");
+    printf("        --s: create soft link\n");
+    printf("        --d: delete link \n");
+    printf("    -p [filename]: print file summary\n");
 }

@@ -67,16 +67,23 @@ int main(int argc, char **argv)      // 옵션의 개수와 옵션 문자열을 
         }
         break;
     case 'l':
-        switch (argv[2][1])
+        switch (argv[2][2])
         {
         case 'h':   /* hard link */
-            /* code */
+            create_hardlink(argv[3]);
             break;
         case 's':   /* soft link */
+            create_softlink(argv[3]);
+            break;
+        case 'd':   /* delete link */
+            delete_link(argv[3]);
             break;
         default:
             break;
         }
+        break;
+    case 'p':       /* TODO: 파일 정보 print 함수 추가*/
+        break;
     default:
         printf("./file_handler_main: invalid option -- %s\n", argv[1]);
         help();

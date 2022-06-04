@@ -13,14 +13,18 @@
 
 프로그램의 사용 형식은 다음과 같습니다.
 <center>
-`./yj_file_handler [option] filename message`
+`./file_handler_main [options] [variable[=value] ...]`
 </center>
 
 해당 프로그램에서 제공하는 기능은 다음과 같습니다.
-* `-r`: 파일 읽기
-* `-w`: 파일에 메세지 쓰기
-* `-a`: 파일에 문자열 append 하기
-* `-o`: 파일의 전체 offset print
+* `-r [filename]`: 파일 읽기
+* `-w [filename] [Message]`: 파일에 메세지 쓰기
+* `-a [filename] [Message]`: 파일에 문자열 append 하기
+* `-o [filename]`: 파일의 전체 offset print
+* `-l [--hsd] [filename]`: 링크파일 관련 옵션
+    * `--h`: 하드 링크 생성
+    * `--s`: 소프트 링크 생성
+    * `--d`: 링크 삭제
 
 ## 예시
 

@@ -143,7 +143,7 @@ int yj_file_len_print(char *filename)
     fseek(fp, 0, SEEK_END);
     end = ftell(fp);
 
-    printf("OFFSET TOTAL : %ld\n", end-start);
+    printf("[SUCCESS] OFFSET TOTAL : %ld\n", end-start);
     fclose(fp);
     return 0;
 
@@ -160,8 +160,17 @@ err:
  * @param filename 파일 이름
  * @return int 0: 성공, -1: 실패
  */
-int create_hardlink(char *filename)
-{
+int create_hardlink(const char *filename)
+{   
+    char *temp = malloc(sizeof(char) * 20);    // char 20개 크기만큼 동적 메모리 할당
+    strcpy(temp, (const char *)filename);   // s2에 Hello 문자열 복사
+    strcat(temp, "_hardlink");       // s2 뒤에 s1을 붙임
+    if(link((const char *)filename, (const char*)temp)){
+        printf("[ERROR] Create hardlink FAIL\n");
+        return -1;
+    }
+    printf("[SUCCESS] Create hardlink of %s: %s\n", filename, temp);
+    free(temp);
     return 0;
 }
 
@@ -171,7 +180,32 @@ int create_hardlink(char *filename)
  * @param filename 파일 이름
  * @return int 0: 성공, -1: 실패
  */
-int create_softlink(char *filename)
+int create_softlink(const char *filename)
 {
+    char *temp = malloc(sizeof(char) * 20);    // char 20개 크기만큼 동적 메모리 할당
+    strcpy(temp, (const char *)filename);   // s2에 Hello 문자열 복사
+    strcat(temp, "_softlink");       // s2 뒤에 s1을 붙임
+    if(symlink((const char *)filename, (const char*)temp)){
+        printf("[ERROR] Create softlink FAIL\n");
+        return -1;
+    }
+    printf("[SUCCESS] Create softlink of %s: %s\n", filename, temp);
+    free(temp);
+    return 0;
+}
+
+/**
+ * @brief delete a link file
+ * 
+ * @param filename 파일 이름
+ * @return int 0: 성공, -1: 실패
+ */
+int delete_link(const char *filename)
+{
+    if(unlink(filename)){
+        printf("[ERROR] Delete link FAIL\n");
+        return -1;
+    }
+    printf("[SUCCESS] Delete link %s\n",filename);
     return 0;
 }
