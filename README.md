@@ -24,7 +24,7 @@ Options:
         --h: create hard link
         --s: create soft link
         --d: delete link 
-    -p [filename]: print file summary
+    -p [filename]: print file summaryß
 ```
 
 

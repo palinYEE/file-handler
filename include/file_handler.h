@@ -80,5 +80,13 @@ int delete_link(const char *filename);
  */
 int stat_file(const char *filename);
 
+/**
+ * @brief print sub-files in the directory.
+ * 
+ * @param filename 파일 이름 
+ * @return int 0: 성공, -1: 실패
+ */
+int print_tree(const char *filename);
+
 #else
 #endif

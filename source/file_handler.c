@@ -16,10 +16,7 @@
 #include<sys/types.h>
 #include<sys/sysmacros.h>
 #include<unistd.h>
-#include <time.h>
-
-
-
+#include <time.h>S
 #include"file_handler.h"
 
 /**
@@ -266,5 +263,16 @@ int stat_file(const char *filename)
     printf("[*] Last file modification:   %s", ctime(&sb.st_mtime));
     printf("================================================\n");
 
+    return 0;
+}
+
+/**
+ * @brief print sub-files in the directory.
+ * 
+ * @param filename 파일 이름 
+ * @return int 0: 성공, -1: 실패
+ */
+int print_tree(const char *filename)
+{
     return 0;
 }
