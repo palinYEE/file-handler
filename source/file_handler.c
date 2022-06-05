@@ -16,7 +16,7 @@
 #include<sys/types.h>
 #include<sys/sysmacros.h>
 #include<unistd.h>
-#include <time.h>S
+#include <time.h>
 #include"file_handler.h"
 
 /**
