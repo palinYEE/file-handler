@@ -3,10 +3,29 @@
 ## 개요
 
 * 해당 프로젝트는 file io를 익숙하게 사용하기 위해서 만든 프로그램입니다. 
-* 숙지를 위한 함수는 다음과 같습니다. 
-    *  `fopen, fclose`: 파일 소켓 open, close 함수.
-    * `fputs, fgets`: 파일 string 읽고 쓰기.
-    * `ftell, fseek`: 파일 offset 값 다루기
+
+```
+================================================
+                 YYJ_FILE_HANDLER               
+
+ * @author YYJ (alwns28@kookmin.ac.kr)
+ * @version 0.1
+ * @date 2022-05-29
+ * @copyright Copyright (c) 2022
+================================================
+Usage: ./file_handler_main [options] [variable[=value] ...]
+
+Options:
+    -r [filename]: read file
+    -w [filename] [Message]: write message in file
+    -a [filename] [Message]: append message in file
+    -o [filename]: print total offset 
+    -l  [--hsd] [filename]
+        --h: create hard link
+        --s: create soft link
+        --d: delete link 
+    -p [filename]: print file summary
+```
 
 
 ## 기능
