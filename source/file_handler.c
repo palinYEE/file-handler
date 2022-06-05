@@ -269,10 +269,24 @@ int stat_file(const char *filename)
 /**
  * @brief print sub-files in the directory.
  * 
- * @param filename 파일 이름 
+ * @param directory 디렉토리 이름 
  * @return int 0: 성공, -1: 실패
  */
-int print_tree(const char *filename)
+int print_tree(const char *directory)
 {
+    DIR *dp;
+    struct dirent *entry;
+
+    dp = opendir(directory);
+    if(!dp){
+        printf("[ERROR] opendir() fail\n");
+        return -1;
+    }
+
+    while((entry = readdir(dp))){
+        printf("     |- %s: %s\n",entry->d_name, TYPE2STR(entry->d_type));
+    }
+
+    closedir(dp);
     return 0;
 }

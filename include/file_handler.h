@@ -11,6 +11,19 @@
 #ifndef FILE_HANDLER_H
 #define FILE_HANDLER_H
 
+#include<sys/types.h>
+#include<dirent.h>
+
+#define TYPE2STR(X)\
+    ((X) == DT_BLK    ? "block device" :\
+     (X) == DT_CHR    ? "char device" :\
+     (X) == DT_DIR    ? "directory" :\
+     (X) == DT_FIFO   ? "fifo" :\
+     (X) == DT_LNK    ? "symlink" :\
+     (X) == DT_REG    ? "regular file" :\
+     (X) == DT_SOCK   ? "socket" :\
+     "unknown")
+
 /**
  * @brief 입력한 문자열을 파일에 쓰는 함수 (해당 함수는 append가 아닌 recreate 이다.)
  * 
@@ -86,7 +99,7 @@ int stat_file(const char *filename);
  * @param filename 파일 이름 
  * @return int 0: 성공, -1: 실패
  */
-int print_tree(const char *filename);
+int print_tree(const char *directory);
 
 #else
 #endif
