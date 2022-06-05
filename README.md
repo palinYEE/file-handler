@@ -25,6 +25,7 @@ Options:
         --s: create soft link
         --d: delete link 
     -p [filename]: print file summary
+    -t [directory]: print sub-files in the directory.
 ```
 
 
@@ -45,6 +46,7 @@ Options:
     * `--s`: 소프트 링크 생성
     * `--d`: 링크 삭제
 * `-p [filename]`: 파일 정보 출력 (stat)
+* `-t [directory]`: 입력 디렉토리에 있는 모든 파일 및 디렉토리 출력
 
 ## 예시
 
