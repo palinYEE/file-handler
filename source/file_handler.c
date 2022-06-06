@@ -17,6 +17,7 @@
 #include<sys/sysmacros.h>
 #include<unistd.h>
 #include <time.h>
+#include<errno.h>
 #include"file_handler.h"
 
 /**
@@ -297,7 +298,46 @@ int print_tree(const char *directory)
  * @param directory 경로 이름 
  * @return int 0: 성공, -1: 실패
  */
-int monitor_directory(const char directory)
+int monitor_directory(const char *directory)
 {
+    int fd = -1;
+    int wd = -1;
+    int ret;
+    char buf[1024];
+    struct inotify_event *event;
+
+    fd = inotify_init();
+    if(fd == -1){
+        printf("[ERROR] inotify_init() fail (errno = %d, error string = %s)\n",errno, strerror(errno));
+        return -1;
+    }
+    wd = inotify_add_watch(fd, directory, IN_ALL_EVENTS);
+    if(wd == -1){
+        printf("[ERROR] inotify_add_watch() fail (errno = %d, error string = %s)\n",errno, strerror(errno));
+        goto inotify_err;
+    }
+    while(1){
+        ret = read(fd, (void *)buf, sizeof(buf));
+        if(ret == -1){
+            printf("[ERROR] read fail (errno = %d, error string = %s)\n",errno, strerror(errno));
+            goto inotify_err;
+        }
+        event = (struct inotify_event *)buf;
+        while(ret > 0){
+            printf("[noti] %s : %s\n", event->name, INOTIFY2STR(event->mask));
+            ret -= (sizeof(struct inotify_event) + event->len);
+            event = (struct inotify_event *)((char *)event + sizeof(struct inotify_event) + event->len);
+        }
+    }
+    close(wd);
+    close(fd);
     return 0;
+inotify_err:
+    if(fd > 0){
+        close(fd);
+    }
+    if(wd > 0){
+        close(wd);
+    }
+    return -1;
 }
