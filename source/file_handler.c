@@ -290,3 +290,14 @@ int print_tree(const char *directory)
     closedir(dp);
     return 0;
 }
+
+/**
+ * @brief 입력 경로 감시하는 함수
+ * 
+ * @param directory 경로 이름 
+ * @return int 0: 성공, -1: 실패
+ */
+int monitor_directory(const char directory)
+{
+    return 0;
+}

@@ -101,5 +101,13 @@ int stat_file(const char *filename);
  */
 int print_tree(const char *directory);
 
+/**
+ * @brief 입력 경로 감시하는 함수
+ * 
+ * @param directory 경로 이름 
+ * @return int 0: 성공, -1: 실패
+ */
+int monitor_directory(const char directory);
+
 #else
 #endif

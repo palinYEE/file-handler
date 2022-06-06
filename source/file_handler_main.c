@@ -85,8 +85,11 @@ int main(int argc, char **argv)      // 옵션의 개수와 옵션 문자열을 
     case 'p':       /* 파일 정보 print 함수 */
         stat_file(argv[2]);
         break;
-    case 't':       /* TODO: 입력 디렉토리 하위 파일 리스트 출력 함수 */
+    case 't':       /* 입력 디렉토리 하위 파일 리스트 출력 함수 */
         print_tree(argv[2]);
+        break;
+    case 's':
+        monitor_directory(argv[2]);
         break;
     default:
         printf("./file_handler_main: invalid option -- %s\n", argv[1]);

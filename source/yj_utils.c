@@ -34,4 +34,5 @@ void help(void)
     printf("        --d: delete link \n");
     printf("    -p [filename]: print file summary\n");
     printf("    -t [directory]: print sub-files in the directory.\n");
+    printf("    -s [directory]: monitor directory\n");
 }
