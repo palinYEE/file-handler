@@ -65,6 +65,11 @@ alwns28@ubuntu1804:~/YYJ/01.LSP/01_fileHandler/source$ ./yj_file_handler -r test
 MESSAGE - yyj test 2 YYJ TEST
 ```
 
+## TODO
+
+* file lock을 테스트 할 수 있는 옵션 추가. 
+* 폴더 감시 기능 추가.
+
 ## 문의
 
 * 해당 프로그램에 대해서 피드백을 주실 분들은 아래 이메일로 메일 주시면 감사합니다. 
