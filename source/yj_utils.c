@@ -11,6 +11,7 @@
 
 #include<stdio.h>
 #include"yj_utils.h"
+#include"file_handler.h"
 
 void help(void)
 {
@@ -21,6 +22,7 @@ void help(void)
     printf(" * @version 0.1\n");
     printf(" * @date 2022-05-29\n");
     printf(" * @copyright Copyright (c) 2022\n");
+    printf(" * @current OS : %s\n",_M_OPTION_OS_MESSAGE_);
     printf("================================================\n");
     printf("Usage: ./file_handler_main [options] [variable[=value] ...]\n\n");
     printf("Options:\n");

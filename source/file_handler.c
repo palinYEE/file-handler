@@ -22,6 +22,9 @@
 #include<errno.h>
 #include"file_handler.h"
 #include"yj_utils.h"
+#ifdef _M_OPTION_LINUX_FLAG_
+#include<sys/epoll.h>
+#endif
 
 /**
  * @brief 입력한 문자열을 파일에 쓰는 함수 (해당 함수는 append가 아닌 recreate 이다.)
@@ -356,11 +359,16 @@ int monitor_multi_directory(const int path_num, char **argv)
     int fd[path_num];
     int wd[path_num];
     int i;
-    int ret; 
+    int ret = 0; 
     char buf[1024];
     struct inotify_event *ino_event;
+#ifdef _M_OPTION_WIN_FLAG_
     struct timeval timeout;
     fd_set fds;
+#elif _M_OPTION_LINUX_FLAG_
+    struct epoll_event ep_event;
+    int epfd = -1;
+#endif 
 
 #if DEBUG
     printf("[DEBUG] Monitoring path num : %d\n",path_num);
@@ -382,7 +390,26 @@ int monitor_multi_directory(const int path_num, char **argv)
         }
     }
 
+#ifdef _M_OPTION_LINUX_FLAG_
+    epfd = epoll_create1(0);
+    if(epfd == -1){
+        printf("[ERROR] epoll_create1(0) fail (errno = %d, error string = %s)\n", errno, strerror(errno));
+        goto ino_add_err;
+    }
+    for(i=0; i<path_num; i++){
+        memset((void *)&ep_event, 0, sizeof(ep_event));
+        ep_event.events = EPOLLIN;
+        ep_event.data.fd = fd[i];
+        ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd[i], &ep_event);
+        if(ret == -1){
+            printf("[ERROR] fd[%d] - epoll_ctl() fail (errno = %d, error string = %s)\n", i, errno, strerror(errno));
+            goto ino_add_err;
+        }
+    }
+#endif
+
     while(1){
+#ifdef _M_OPTION_WIN_FLAG_
         FD_ZERO(&fds);
         for(i=0; i<path_num; i++){
             FD_SET(fd[i], &fds);
@@ -393,18 +420,22 @@ int monitor_multi_directory(const int path_num, char **argv)
 
         int max_fd = yj_find_max(fd, path_num);
         ret = select(max_fd + 1, &fds, NULL, NULL, &timeout);
-        
+
+#elif _M_OPTION_LINUX_FLAG_
+        ret = epoll_wait(epfd, &ep_event, 1, 5000);
         if(ret == -1) {
-            printf("[ERROR] select() fail (errno = %d, error string = %s)\n", errno, strerror(errno));
+
+            printf("[ERROR] %s() fail (errno = %d, error string = %s)\n", _M_OPTION_MODE_STRING_, errno, strerror(errno));
             goto ino_add_err;
         }
 
         if(ret == 0){
-            printf("* [TIMEOUT] select() timeout occur --> 5 sec\n");
+            printf("* [TIMEOUT] %s() timeout occur --> 5 sec\n",_M_OPTION_MODE_STRING_);
             continue;
         }
-
+#endif
         for(i=0; i<path_num; i++){
+#ifdef _M_OPTION_WIN_FLAG_
             if(FD_ISSET(fd[i], &fds)){
                 memset((void *)&buf, 0, sizeof(buf));
                 ret = read(fd[i], (void *)buf, sizeof(buf));
@@ -415,6 +446,18 @@ int monitor_multi_directory(const int path_num, char **argv)
                     ret -= (sizeof(struct inotify_event) + ino_event->len);
                 }
             }
+#elif _M_OPTION_LINUX_FLAG_
+            if(ep_event.data.fd == fd[i]){
+                memset((void *)&buf, 0, sizeof(buf));
+                ret = read(fd[i], (void *)buf, sizeof(buf));
+                ino_event = (struct inotify_event *)&buf[0];
+                while(ret > 0){
+                    printf(" * [INFO] path : %s -> file : %s -> do : %s\n",argv[i+2], ino_event->name,INOTIFY2STR(ino_event->mask));
+                    ino_event = (struct inotify_event *)((char *)ino_event + sizeof(struct inotify_event) + ino_event->len);
+                    ret -= (sizeof(struct inotify_event) + ino_event->len);
+                }
+            }
+#endif
         }
     }
 
@@ -426,6 +469,10 @@ int monitor_multi_directory(const int path_num, char **argv)
             close(wd[i]);
         }
     }
+
+#ifdef _M_OPTION_LINUX_FLAG_
+    close(epfd);
+#endif
 
     return 0;
 ino_add_err:
@@ -437,5 +484,8 @@ ino_add_err:
             close(wd[i]);
         }
     }
+#ifdef _M_OPTION_LINUX_FLAG_
+    close(epfd);
+#endif
     return -1;
 }

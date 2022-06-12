@@ -16,11 +16,13 @@
 #include<sys/inotify.h>
 
 #ifdef _WIN32
-#define _M_OPTION_WIN_MESSAGE_ "WINDOW"
+#define _M_OPTION_OS_MESSAGE_ "WINDOW"
 #define _M_OPTION_WIN_FLAG_ 1
+#define _M_OPTION_MODE_STRING_ "SELECT"
 #elif __linux__
-#define _M_OPTION_LINUX_MESSAGE_ "LINUX"
+#define _M_OPTION_OS_MESSAGE_ "LINUX"
 #define _M_OPTION_LINUX_FLAG_ 1
+#define _M_OPTION_MODE_STRING_ "EPOLL"
 #endif 
 
 #define DEBUG 1
