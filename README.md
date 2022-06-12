@@ -6,12 +6,13 @@
 
 ```
 ================================================
-                 YYJ_FILE_HANDLER               
+                 YYJ_FILE_HANDLER
 
  * @author YYJ (alwns28@kookmin.ac.kr)
  * @version 0.1
  * @date 2022-05-29
  * @copyright Copyright (c) 2022
+ * @current OS : LINUX
 ================================================
 Usage: ./file_handler_main [options] [variable[=value] ...]
 
@@ -19,13 +20,15 @@ Options:
     -r [filename]: read file
     -w [filename] [Message]: write message in file
     -a [filename] [Message]: append message in file
-    -o [filename]: print total offset 
+    -o [filename]: print total offset
     -l  [--hsd] [filename]
         --h: create hard link
         --s: create soft link
-        --d: delete link 
+        --d: delete link
     -p [filename]: print file summary
     -t [directory]: print sub-files in the directory.
+    -s [directory]: monitor directory
+    -m [directory1] [directory2] ...: monitor multi directory
 ```
 
 
@@ -48,27 +51,11 @@ Options:
 * `-p [filename]`: 파일 정보 출력 (stat)
 * `-t [directory]`: 입력 디렉토리에 있는 모든 파일 및 디렉토리 출력
 * `-s [directory]: monitor directory`
-
-## 예시
-
-```
-alwns28@ubuntu1804:~/YYJ/01.LSP/01_fileHandler/source$ ./yj_file_handler -w test.txt "yyj test"
-[SUCCESS] SAVE MESSAGE IN test.txt
-alwns28@ubuntu1804:~/YYJ/01.LSP/01_fileHandler/source$ ./yj_file_handler -r test.txt
-MESSAGE - yyj test
-alwns28@ubuntu1804:~/YYJ/01.LSP/01_fileHandler/source$ ./yj_file_handler -o test.txt
-OFFSET TOTAL : 8
-alwns28@ubuntu1804:~/YYJ/01.LSP/01_fileHandler/source$ ./yj_file_handler -a test.txt " 2 YYJ TEST"
-after fopen(), offset = 8
-[SUCCESS] SAVE MESSAGE IN test.txt
-before fclose(). offset=19
-alwns28@ubuntu1804:~/YYJ/01.LSP/01_fileHandler/source$ ./yj_file_handler -r test.txt
-MESSAGE - yyj test 2 YYJ TEST
-```
+* `-m [directory1] [directory2] ...: monitor multi directory`
 
 ## TODO
 
-* file lock을 테스트 할 수 있는 옵션 추가. 
+* inotify 에서 unknown 나오는 현상 수정 
 
 ## 문의
 
