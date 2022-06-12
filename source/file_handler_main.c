@@ -92,6 +92,7 @@ int main(int argc, char **argv)      // 옵션의 개수와 옵션 문자열을 
         monitor_directory(argv[2]);
         break;
     case 'm':   /* TODO: select 또는 epoll을 사용하여 여러 디렉토리를 watch 하는 함수 작성. */
+        monitor_multi_directory(argc - 2, argv);
         break;
     default:
         printf("./file_handler_main: invalid option -- %s\n", argv[1]);

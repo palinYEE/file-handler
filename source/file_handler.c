@@ -15,10 +15,13 @@
 #include<sys/stat.h>
 #include<sys/types.h>
 #include<sys/sysmacros.h>
+#include<sys/time.h>
+#include<sys/select.h>
 #include<unistd.h>
-#include <time.h>
+#include<time.h>
 #include<errno.h>
 #include"file_handler.h"
+#include"yj_utils.h"
 
 /**
  * @brief 입력한 문자열을 파일에 쓰는 함수 (해당 함수는 append가 아닌 recreate 이다.)
@@ -345,10 +348,94 @@ inotify_err:
 /**
  * @brief 여러개의 디렉토리를 모니터링하는 함수
  * 
- * @param argc 디렉터리 
- * @return int 
+ * @param argv 디렉터리 
+ * @return int 0: 성공, -1: 실패
  */
-int monitor_multi_directory(char **argc)
+int monitor_multi_directory(const int path_num, char **argv)
 {
+    int fd[path_num];
+    int wd[path_num];
+    int i;
+    int ret; 
+    char buf[1024];
+    struct inotify_event *ino_event;
+    struct timeval timeout;
+    fd_set fds;
+
+#if DEBUG
+    printf("[DEBUG] Monitoring path num : %d\n",path_num);
+#endif 
+
+    for(i=0;i<path_num; i++){
+        fd[i] = inotify_init();
+#if DEBUG
+        printf("        - path: %s - %d\n", argv[i+2], fd[i]);
+#endif
+        if(fd[i] == -1){
+            printf("[ERROR] fd[%d] = inotify_init() fail (errno = %d, error string = %s)\n",i, errno, strerror(errno));
+            return -1;
+        }
+        wd[i] = inotify_add_watch(fd[i], argv[2 + i], IN_ALL_EVENTS);
+        if(wd[i] == -1){
+            printf("[ERROR] wd[%d] = inotify_add_watch() fail (errno = %d, error string = %s)\n",i, errno, strerror(errno));
+            goto ino_add_err;
+        }
+    }
+
+    while(1){
+        FD_ZERO(&fds);
+        for(i=0; i<path_num; i++){
+            FD_SET(fd[i], &fds);
+        }
+
+        timeout.tv_sec = 5;
+        timeout.tv_usec = 0;
+
+        int max_fd = yj_find_max(fd, path_num);
+        ret = select(max_fd + 1, &fds, NULL, NULL, &timeout);
+        
+        if(ret == -1) {
+            printf("[ERROR] select() fail (errno = %d, error string = %s)\n", errno, strerror(errno));
+            goto ino_add_err;
+        }
+
+        if(ret == 0){
+            printf("* [TIMEOUT] select() timeout occur --> 5 sec\n");
+            continue;
+        }
+
+        for(i=0; i<path_num; i++){
+            if(FD_ISSET(fd[i], &fds)){
+                memset((void *)&buf, 0, sizeof(buf));
+                ret = read(fd[i], (void *)buf, sizeof(buf));
+                ino_event = (struct inotify_event *)&buf[0];
+                while(ret > 0){
+                    printf(" * [INFO] path : %s -> file : %s -> do : %s\n",argv[i+2], ino_event->name,INOTIFY2STR(ino_event->mask));
+                    ino_event = (struct inotify_event *)((char *)ino_event + sizeof(struct inotify_event) + ino_event->len);
+                    ret -= (sizeof(struct inotify_event) + ino_event->len);
+                }
+            }
+        }
+    }
+
+    for(i=0; i<path_num; i++){
+        if(fd[i] >= 0){
+            close(fd[i]);
+        }
+        if(wd[i] >= 0){
+            close(wd[i]);
+        }
+    }
+
     return 0;
+ino_add_err:
+    for(i=0; i<path_num; i++){
+        if(fd[i] >= 0){
+            close(fd[i]);
+        }
+        if(wd[i] >= 0){
+            close(wd[i]);
+        }
+    }
+    return -1;
 }

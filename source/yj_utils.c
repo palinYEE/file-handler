@@ -37,3 +37,22 @@ void help(void)
     printf("    -s [directory]: monitor directory\n");
     printf("    -m [directory1] [directory2] ...: monitor multi directory\n");
 }
+
+/**
+ * @brief int 형 배열에서 최대값 찾는 함수
+ * 
+ * @param arr int 형 배열
+ * @param arr_num 배열 내에 있는 변수 개수 
+ * @return int 최대값 출력
+ */
+int yj_find_max(int *arr, int arr_num)
+{
+    int max = arr[0];
+    int i;
+    for(i=1; i<arr_num; i++){
+        if(max < arr[i]){
+            max = arr[i];
+        }
+    }
+    return max;
+}

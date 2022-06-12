@@ -15,6 +15,16 @@
 #include<dirent.h>
 #include<sys/inotify.h>
 
+#ifdef _WIN32
+#define _M_OPTION_WIN_MESSAGE_ "WINDOW"
+#define _M_OPTION_WIN_FLAG_ 1
+#elif __linux__
+#define _M_OPTION_LINUX_MESSAGE_ "LINUX"
+#define _M_OPTION_LINUX_FLAG_ 1
+#endif 
+
+#define DEBUG 1
+
 #define TYPE2STR(X)\
     ((X) == DT_BLK    ? "block device" :\
      (X) == DT_CHR    ? "char device" :\
@@ -129,9 +139,10 @@ int monitor_directory(const char *directory);
  * @brief 여러개의 디렉토리를 모니터링하는 함수
  * 
  * @param argc 디렉터리 
+ * @param path_num 입력한 디렉터리 개수
  * @return int 0: 성공, -1: 실패
  */
-int monitor_multi_directory(char **argc);
+int monitor_multi_directory(const int path_num, char **argc);
 
 #else
 #endif

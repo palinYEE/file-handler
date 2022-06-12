@@ -18,5 +18,14 @@
  */
 void help(void);
 
+/**
+ * @brief int 형 배열에서 최대값 찾는 함수
+ * 
+ * @param arr int 형 배열
+ * @param arr_num 배열 내에 있는 변수 개수 
+ * @return int 최대값 출력
+ */
+int yj_find_max(int *arr, int arr_num);
+
 #else
 #endif
