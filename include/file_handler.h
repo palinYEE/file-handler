@@ -125,5 +125,13 @@ int print_tree(const char *directory);
  */
 int monitor_directory(const char *directory);
 
+/**
+ * @brief 여러개의 디렉토리를 모니터링하는 함수
+ * 
+ * @param argc 디렉터리 
+ * @return int 0: 성공, -1: 실패
+ */
+int monitor_multi_directory(char **argc);
+
 #else
 #endif

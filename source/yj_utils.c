@@ -35,4 +35,5 @@ void help(void)
     printf("    -p [filename]: print file summary\n");
     printf("    -t [directory]: print sub-files in the directory.\n");
     printf("    -s [directory]: monitor directory\n");
+    printf("    -m [directory1] [directory2] ...: monitor multi directory\n");
 }

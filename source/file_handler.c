@@ -341,3 +341,14 @@ inotify_err:
     }
     return -1;
 }
+
+/**
+ * @brief 여러개의 디렉토리를 모니터링하는 함수
+ * 
+ * @param argc 디렉터리 
+ * @return int 
+ */
+int monitor_multi_directory(char **argc)
+{
+    return 0;
+}
